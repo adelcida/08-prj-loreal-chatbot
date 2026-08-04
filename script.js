@@ -2,13 +2,19 @@
 const chatForm = document.getElementById("chatForm");
 const userInput = document.getElementById("userInput");
 const chatWindow = document.getElementById("chatWindow");
+const currentQueryEl = document.getElementById("currentQuery");
 
 // Add one message bubble to the chat window.
 const appendMessage = (roleClass, text) => {
-  const messageEl = document.createElement("div");
-  messageEl.className = `msg ${roleClass}`;
-  messageEl.textContent = text;
-  chatWindow.appendChild(messageEl);
+  const row = document.createElement("div");
+  row.className = "msg-row";
+
+  const bubble = document.createElement("div");
+  bubble.className = `msg-bubble ${roleClass}`;
+  bubble.textContent = text;
+
+  row.appendChild(bubble);
+  chatWindow.appendChild(row);
   chatWindow.scrollTop = chatWindow.scrollHeight;
 };
 
@@ -28,9 +34,10 @@ chatForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const userText = userInput.value.trim();
-  if (!userText) {
-    return;
-  }
+  if (!userText) return;
+
+  // update the current-query preview
+  if (currentQueryEl) currentQueryEl.textContent = userText;
 
   appendMessage("user", userText);
   userInput.value = "";
